@@ -1,0 +1,131 @@
+openapi: 3.0.0
+info:
+  title: Leaderboard API
+  description: Leaderaboard API
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/gntem/gleaderboard/1.0.0
+  description: gLeaderboard
+paths:
+  /leaderboards:
+    post:
+      summary: Adds leaderboard
+      description: Adds leaderboard
+      operationId: addLeaderboard
+      requestBody:
+        description: Leaderboard to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Leaderboard'
+      responses:
+        "201":
+          description: leaderboard created
+        "400":
+          description: invalid input, object invalid
+        "409":
+          description: an existing item already exists
+  /leaderboards/:id:
+    get:
+      summary: Get Leaderboards
+      description: |
+        Fetch Leaderboards
+      operationId: fetchLeaderboards
+      parameters:
+      - name: id
+        in: path
+        description: Ger leaderboard by id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Get leaderboard by id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Score'
+                x-content-type: application/json
+        "400":
+          description: bad input parameter
+    delete:
+      summary: Delete leaderboards
+      description: |
+        Remove leaderboard
+      operationId: remove leaderboard
+      parameters:
+      - name: id
+        in: path
+        description: Ger leaderboard by id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Remove leaderboard by id
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Leaderboard'
+                x-content-type: application/json
+  /leaderboards/:id/scores:
+    put:
+      summary: Update leaderboard scores
+      description: update leaderboard
+      operationId: updateLeaderboard
+      requestBody:
+        description: Leaderboard to add
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Score'
+      responses:
+        "200":
+          description: leaderboard updated
+        "400":
+          description: invalid input, object invalid
+        "409":
+          description: an existing item already exists
+components:
+  schemas:
+    Score:
+      required:
+      - entityId
+      - score
+      type: object
+      properties:
+        entityId:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        score:
+          type: number
+          format: number
+          example: -100
+      example:
+        score: -100
+        entityId: d290f1ee-6c54-4b01-90e6-d701748f0851
+    Leaderboard:
+      required:
+      - uuid
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      example:
+        uuid: d290f1ee-6c54-4b01-90e6-d701748f0851
